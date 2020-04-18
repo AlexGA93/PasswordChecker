@@ -33,22 +33,26 @@ def Deductions(password):
         counter = password.count(elem)
         if(counter>1): rep_char+=counter
     #print(rep_char)  #5
-    #Consecutive Uppercase
-    #Consecutive Lowercase
-    counter_l=0
-    counter_u=0
+    #Consecutives
+    counter_u = 0
+    counter_l = 0
+    counter_n = 0
     for i in range(len(password)):
+        #print(password[i].isnumeric())
         checker_u = password[i-1].isupper() == password[i].isupper()
         checker_l = password[i-1].islower() == password[i].islower()
-        if( (i>0) and (checker_u == password[i].isupper()) ):
+        checker_n = password[i-1].isnumeric() == password[i].isnumeric()
+        if( (i>0) and (checker_u == password[i].isupper()) ):#Consecutive Uppercase
             counter_u+=1
-        elif( (i>0) and (checker_l == password[i].islower()) ):
+        elif( (i>0) and (checker_l == password[i].islower()) ):#Consecutive Lowercase
             counter_l+=1
-    print('Contador Mayusculas: ',counter_u-1,'\nContador Minusculas: ',counter_l-1)
-    #Consecutive Numbers
-
+        elif( (i>0) and (checker_n == password[i].isnumeric()) ):#Consecutive Numbers
+            counter_n+=1
+    print('Contador Mayusculas: ',counter_u-1,'\nContador Minusculas: ',counter_l-1,'\nContador Numeros: ',counter_n-1)
     #Sequential Numbers
     #Sequentials Symbols
+
+    
 
     #return result
     return 'temporal'
