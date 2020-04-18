@@ -3,6 +3,7 @@ import pprint
 #lists to check in Ascii map
 Upper = list(range(65,91))
 Lower = list(range(97,123))
+Letters = Upper+Lower
 Numbers = list(range(48,58))
 Symbols = list(range(33,48))+list(range(58+65))+list(range(91,97))
 
@@ -33,6 +34,8 @@ def Deductions(password):
         counter = password.count(elem)
         if(counter>1): rep_char+=counter
     #print(rep_char)  #5
+    counter_Deductions['countRepChars'] = rep_char
+
     #Consecutives
     counter_u = 0
     counter_l = 0
@@ -48,14 +51,57 @@ def Deductions(password):
             counter_l+=1
         elif( (i>0) and (checker_n == password[i].isnumeric()) ):#Consecutive Numbers
             counter_n+=1
-    print('Contador Mayusculas: ',counter_u-1,'\nContador Minusculas: ',counter_l-1,'\nContador Numeros: ',counter_n-1)
+    #print('Contador Mayusculas: ',counter_u-1,'\nContador Minusculas: ',counter_l-1,'\nContador Numeros: ',counter_n-1)
+    counter_Deductions['countConsUpp'] = counter_u-1
+    counter_Deductions['countConsLow'] = counter_l-1
+    counter_Deductions['countConsNum'] = counter_n-1
+    #Sequential Letters
     #Sequential Numbers
     #Sequentials Symbols
+    list_p = []
+    count_ele_l = 1
+    count_ele_n = 1
+    count_ele_s = 1 
+    keyboard_symbols = [64, 35, 36, 37, 94, 38, 42, 40]
+    for i in range(len(password)):list_p.append(ord(password[i]))
+    for i in range(len(password)):
+        actual = list_p[i]
+        #check if letter turn to lower
+        if actual in Letters: 
+            word1 = chr(actual).lower()
+            actual = ord(word1)
+            list_p[i] = actual
+        #data 'actual' and 'list_p[i]' updated
+        print(actual)
+        #check to counters
+        if(actual in Letters):
+            if( (i>=2) and (list_p[i-1] == actual-1) ):
+                count_ele_l+=1
+        elif(actual in Numbers):
+            if( (i>=2) and (list_p[i-1] == actual-1) ):
+                count_ele_n+=1
+        elif(actual in Symbols):
+            if( (i>=2) and (list_p[i-1] == actual-1) ):
+                count_ele_s+=1
+    #print('Contador simbolos: ',count_ele_s-2,'\nContador letras: ',count_ele_l-2,'\nContador Numeros: ',count_ele_n-2)
+    #storage
+    counter_Deductions['countSeqLetters'] = count_ele_l
+    counter_Deductions['countSeqNumbers'] = count_ele_n
+    counter_Deductions['countSeqSymbols'] = count_ele_s
 
-    
+    resul = ( 
+        counter_Deductions['countLettersOnly'] + 
+        counter_Deductions['countNumbersOnly'] + 
+        counter_Deductions['countRepChars'] + 
+        (counter_Deductions['countConsUpp']*2) + 
+        (counter_Deductions['countConsLow']*2) + 
+        (counter_Deductions['countConsNum']*2) + 
+        (counter_Deductions['countSeqLetters']*3) + 
+        (counter_Deductions['countSeqNumbers']*3) + 
+        (counter_Deductions['countSeqSymbols']*3) )
 
     #return result
-    return 'temporal'
+    return resul
 def Additions(password):
     #checking number of characters
     numberChar = len(password)
@@ -95,7 +141,7 @@ def Additions(password):
 ###############################################################################################################
 def main(counter_Additions, counter_Deductions):
     password = "PAatata93@"
-
+    #print('Password: ',password)
     add_data = Additions(password) #calculating additions to socre
     '''
     print('Score Additions: ', add_data)
@@ -105,7 +151,8 @@ def main(counter_Additions, counter_Deductions):
     deduction_data = Deductions(password) #calculating deductions to score
 
     #print('Deductions: ',deduction_data)
-    #score = add_data - deduction_data
+    score = add_data - deduction_data
+    print('Score: ',score,'%')
 
 if __name__ == "__main__":
     main(counter_Additions, counter_Deductions)
