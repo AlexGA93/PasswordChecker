@@ -6,7 +6,7 @@ import deductions
 
 def main():
     # password model
-    password = "Patatabc93@"
+    password = "Any_password_you_want"
     password_length = len(password)
 
     if(password_length > 8):
